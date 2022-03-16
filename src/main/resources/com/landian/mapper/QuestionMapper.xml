@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.landian.mapper.QuestionMapper">
+    <resultMap id="questionMap" type="question">
+        <id property="id" column="id" />
+        <result property="content" column="qcontent" />
+        <result property="date" column="date"/>
+        <result property="username" column="username" />
+    </resultMap>
+    <select id="findAll" resultMap="questionMap">
+        SELECT question.id,qcontent,DATE,user.`username` FROM question,USER WHERE question.`uid`=user.`id` ORDER BY DATE DESC
+    </select>
+
+    <select id="findAllByMost" resultMap="questionMap">
+        SELECT question.id,qcontent,question.`date`,user.`username`,COUNT(answer.`id`) answernumbers
+        FROM USER,question LEFT JOIN answer
+        ON answer.`qid`=question.`id`
+        WHERE user.`id`=question.`uid`
+        GROUP BY question.id,qcontent,question.`date`
+        ORDER BY answernumbers DESC
+    </select>
+
+    <!--<resultMap id="qMap" type="question">
+        <id property="id" column="qid" />
+        <result property="content" column="qcontent" />
+        <result property="date" column="qdate"/>
+        <result property="username" column="username" />
+        <collection property="answerList" ofType="answer">
+            <id property="id" column="aid"></id>
+            <result property="content" column="acontent"></result>
+            <result property="date" column="adate"/>
+            <result property="username" column="auname" />
+        </collection>
+    </resultMap>-->
+
+    <select id="findQuestionById" resultMap="questionMap" parameterType="int">
+        SELECT q.`id`, q.`qcontent`,q.`date`,u.`username`
+        FROM question q,USER u
+        WHERE q.`id` = #{id} AND u.`id`=q.`uid`
+    </select>
+
+    <insert id="addQuestion" parameterType="String">
+        INSERT INTO question(qcontent,DATE,uid) VALUES(#{content},#{date},#{uid})
+    </insert>
+
+    <delete id="deleteQuestionByUid">
+        delete from question where id =#{uid}
+    </delete>
+
+</mapper>

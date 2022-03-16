@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.landian.mapper.UserMapper">
+
+    <select id="findUserById" resultType="user">
+        select * from user where id = #{id}
+    </select>
+
+    <select id="login" parameterType="String" resultType="user">
+        select * from user where username=#{username} and password=#{password};
+    </select>
+
+    <insert id="register" parameterType="String">
+        insert into user(username,PASSWORD,email) values (#{username},#{password},#{email})
+    </insert>
+
+    <select id="findUserByUsername" parameterType="String" resultType="user">
+        select * from user where username=#{username}
+    </select>
+
+    <delete id="deleteUserById" parameterType="Integer">
+        delete from USER where id=#{id}
+    </delete>
+
+    <select id="findAllUser" resultType="user">
+        select * from user
+    </select>
+
+    <update id="updateUserById">
+        UPDATE USER u
+        SET u.`username`=#{username} ,u.`password`=#{password},u.`email`=#{email}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

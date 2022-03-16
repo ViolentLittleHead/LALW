@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.landian.mapper.AlgorithmMapper">
+
+    <insert id="addAlgorithm" parameterType="String">
+        INSERT INTO ALGORITHM(content,DATE,uid,title,fileName) VALUES(#{content},#{date},#{uid},#{title},#{fileName})
+    </insert>
+
+    <resultMap id="algorithmMap" type="algorithm">
+        <id property="id" column="id"></id>
+        <result property="title" column="title" />
+        <result property="date" column="date" />
+        <result property="username" column="username" />
+    </resultMap>
+
+    <select id="findAllAlgorithm" resultMap="algorithmMap">
+        SELECT algorithm.`id`,title,DATE,u.`username` FROM ALGORITHM,USER u
+        WHERE u.`id`=uid
+        ORDER BY DATE DESC
+    </select>
+
+    <resultMap id="oneAlgorithm" type="algorithm">
+        <id property="id" column="id"></id>
+        <result property="content" column="content"/>
+        <result property="title" column="title" />
+        <result property="date" column="date" />
+        <result property="username" column="username" />
+    </resultMap>
+
+    <select id="findAlgorithmById" resultMap="oneAlgorithm">
+        SELECT al.`id`,LEFT(content,100) content,al.`date`,al.title,u.`username` FROM ALGORITHM al,USER u
+        WHERE al.`uid`=u.`id` AND al.`id`=#{id}
+    </select>
+
+    <select id="downloadAlgorithm" resultType="algorithm">
+        SELECT * FROM ALGORITHM WHERE id = #{id}
+    </select>
+
+    <delete id="deleteAlgorithmByUid">
+        delete from algorithm where uid =#{uid}
+    </delete>
+</mapper>
+
